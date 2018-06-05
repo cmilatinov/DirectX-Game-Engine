@@ -34,6 +34,7 @@ bool InitD3D(HWND hWnd);
 bool CreateDeviceAndSwapChain(HWND hWnd);
 bool CreateBuffers();
 void CleanD3D();
+void KeyEvent(int type, int key, int modifiers);
 
 void gotoxy(int x, int y);
 void print_video_card_info(ID3D11Device *  device);
@@ -83,6 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 	// create the input
 	input = new Input(hInstance, display->hWnd, SCREEN_WIDTH, SCREEN_HEIGHT);
+	input->SetKeyEventCallback(KeyEvent);
 
 	// initialize the engine
 	if (!engine->InitPipeline()) {
@@ -332,6 +334,16 @@ void CleanD3D() {
 	depthbuffer->Release();
 	
 }
+
+void KeyEvent(int type, int key, int modifiers) {
+
+	gotoxy(0, 4);
+	cout << "                                                                             ";
+	gotoxy(0, 4);
+	cout << "Key '" << (int)key << "' was " << (type == VK_PRESS ? "pressed" : "released") << " with modifier " << modifiers << endl;
+
+}
+
 
 
 // utilities

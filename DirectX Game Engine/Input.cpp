@@ -21,7 +21,7 @@ Input::Input(HINSTANCE hInstance, HWND hWnd, int screenWidth, int screenHeight){
 		exit(EXIT_FAILURE);
 	}
 
-	hr = keyboard->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+	hr = keyboard->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	if (FAILED(hr)) {
 		MessageBox(NULL, "Failed to set keyboard cooperative level", "Error", MB_OK | MB_ICONERROR);
 		exit(EXIT_FAILURE);
@@ -74,11 +74,9 @@ void Input::Frame(double deltaSec) {
 	ReadKeyboard();
 	ReadMouse();
 
-	if (currentKeyboardState[DIK_ESCAPE]) {
-		std::cout << ((int)currentKeyboardState[DIK_ESCAPE]) << std::endl;
-		system("pause");
+	if (currentKeyboardState[DIK_ESCAPE])
 		exit(EXIT_SUCCESS);
-	}
+	
 
 	int currentModifiers = 0;
 	if (currentKeyboardState[DIK_LCONTROL] || currentKeyboardState[DIK_RCONTROL])
@@ -92,9 +90,9 @@ void Input::Frame(double deltaSec) {
 	for (int c = 0; c < sizeof(currentKeyboardState); c++) {
 		if (currentKeyboardState[c] != oldKeyboardState[c]) {
 			if (currentKeyboardState[c])
-				keyCallback(VK_PRESS, currentKeyboardState[c], currentModifiers);
+				keyCallback(VK_PRESS, c, currentModifiers);
 			else
-				keyCallback(VK_RELEASE, currentKeyboardState[c], currentModifiers);
+				keyCallback(VK_RELEASE, c, currentModifiers);
 		}
 	}
 
@@ -124,7 +122,7 @@ void Input::ReadMouse() {
 
 }
 
-void Input::SetKeyEventCallback(void(*callback)(int type, BYTE key, int modifiers)) {
+void Input::SetKeyEventCallback(void(*callback)(int type, int key, int modifiers)) {
 
 	this->keyCallback = callback;
 

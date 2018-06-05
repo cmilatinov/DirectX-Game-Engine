@@ -32,7 +32,7 @@ private:
 	void ReadKeyboard();
 	void ReadMouse();
 
-	void (*keyCallback) (int type, BYTE key, int modifiers);
+	void (*keyCallback) (int type, int key, int modifiers);
 	void (*mouseCallback) (int type, int x, int y, int button);
 
 public:
@@ -41,6 +41,6 @@ public:
 
 	void Frame(double deltaSec);
 
-	void SetKeyEventCallback(void (*callback)(int type, BYTE key, int modifiers));
+	void SetKeyEventCallback(void (*callback)(int type, int key, int modifiers));
 };
 
