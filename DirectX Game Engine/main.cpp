@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <chrono>
 
 #include <windows.h>
@@ -52,6 +53,7 @@ ID3D11RenderTargetView *		backbuffer;
 ID3D11DepthStencilView *		depthbuffer;
 
 int fps = 0;
+int msaaSamples = 1;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow){
 
@@ -109,6 +111,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			TranslateMessage(&msg);
 
 			// send the message to the WindowProc function
+			gotoxy(0, 5);
 			DispatchMessage(&msg);
 
 			// check to see if it's time to quit
@@ -171,8 +174,10 @@ bool InitD3D(HWND hWnd) {
 		return false;
 	}
 
-	if(!CreateBuffers())
+	if (!CreateBuffers()) {
+		MessageBox(NULL, "Failed to create buffers", "Error", MB_OK | MB_ICONERROR);
 		return false;
+	}
 	
 	// Set the viewport
 	D3D11_VIEWPORT viewport;
@@ -204,7 +209,7 @@ bool CreateDeviceAndSwapChain(HWND hWnd) {
 	scd.BufferDesc.Height = SCREEN_HEIGHT;                  // set the back buffer height
 	scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;      // how swap chain is to be used
 	scd.OutputWindow = hWnd;                                // the window to be used
-	scd.SampleDesc.Count = 8;                               // how many multisamples
+	scd.SampleDesc.Count = msaaSamples;                               // how many multisamples
 	scd.Windowed = TRUE;                                    // windowed/full-screen mode
 	scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;     // allow full-screen switching
 
@@ -212,7 +217,7 @@ bool CreateDeviceAndSwapChain(HWND hWnd) {
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		D3D11_CREATE_DEVICE_DEBUG,
+		/*D3D_CREATE_DEVICE_DEBUG*/ NULL,
 		NULL,
 		NULL,
 		D3D11_SDK_VERSION,
@@ -222,9 +227,12 @@ bool CreateDeviceAndSwapChain(HWND hWnd) {
 		NULL,
 		&devcon);
 
-	if (FAILED(hr))
+	if (FAILED(hr)) {
+		stringstream sstr;
+		sstr << hex << "Error Code : 0x" << hr;
+		MessageBox(NULL, sstr.str().c_str(), "Error", MB_OK | MB_ICONERROR);
 		return false;
-	else
+	}else
 		return true;
 }
 
@@ -253,7 +261,7 @@ bool CreateBuffers() {
 	descDepth.MipLevels = 1;
 	descDepth.ArraySize = 1;
 	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	descDepth.SampleDesc.Count = 8;
+	descDepth.SampleDesc.Count = msaaSamples;
 	descDepth.SampleDesc.Quality = 0;
 	descDepth.Usage = D3D11_USAGE_DEFAULT;
 	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;

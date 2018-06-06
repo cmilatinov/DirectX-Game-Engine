@@ -1,5 +1,5 @@
 #include "Display.h"
-
+#include <iostream>
 
 
 Display::Display(HWND hWnd){
@@ -74,13 +74,16 @@ LRESULT Display::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	// sort through and find what code to run for the message given
 	switch (message)
 	{
+		
 		// this message is read when the window is closed
 		case WM_DESTROY:
 		{
 			// close the application entirely
 			PostQuitMessage(0);
 			return 0;
-		} break;
+		} 
+		
+		break;
 	}
 
 	// Handle any messages the switch statement didn't
