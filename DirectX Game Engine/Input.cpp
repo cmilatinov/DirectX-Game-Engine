@@ -3,6 +3,8 @@
 
 Input::Input(HINSTANCE hInstance, HWND hWnd, int screenWidth, int screenHeight){
 	
+	this->hWnd = hWnd;
+
 	HRESULT hr = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, NULL);
 	if (FAILED(hr)) {
 		MessageBox(NULL, "Failed to create DirectInput instance", "Error", MB_OK | MB_ICONERROR);
@@ -77,26 +79,36 @@ void Input::Frame(double deltaSec) {
 	if (currentKeyboardState[DIK_ESCAPE])
 		exit(EXIT_SUCCESS);
 	
-
 	int currentModifiers = 0;
 	if (currentKeyboardState[DIK_LCONTROL] || currentKeyboardState[DIK_RCONTROL])
 		currentModifiers |= VK_CTRL;
 	if (currentKeyboardState[DIK_LSHIFT] || currentKeyboardState[DIK_RSHIFT])
 		currentModifiers |= VK_SHIFT;
 
-	if (keyCallback == nullptr)
-		return;
-
-	for (int c = 0; c < sizeof(currentKeyboardState); c++) {
-		if (currentKeyboardState[c] != oldKeyboardState[c]) {
-			if (currentKeyboardState[c])
-				keyCallback(VK_PRESS, c, currentModifiers);
-			else
-				keyCallback(VK_RELEASE, c, currentModifiers);
+	if (keyCallback)
+		for (int c = 0; c < sizeof(currentKeyboardState); c++) {
+			if (currentKeyboardState[c] != oldKeyboardState[c]) {
+				if (currentKeyboardState[c])
+					keyCallback(VK_PRESS, c, currentModifiers);
+				else
+					keyCallback(VK_RELEASE, c, currentModifiers);
+			}
 		}
-	}
 
-	mouseState.rgbButtons;
+	if (mouseCallback)
+		for (int c = 0; c < sizeof(currentMouseState.rgbButtons); c++) {
+			if (currentMouseState.rgbButtons[c] != oldMouseState.rgbButtons[c]) {
+				POINT mouseCoords;
+				GetCursorPos(&mouseCoords);
+				ScreenToClient(hWnd, &mouseCoords);
+								
+				if (currentMouseState.rgbButtons[c])
+					mouseCallback(VK_PRESS, mouseCoords.x, mouseCoords.y, c);
+				else
+					mouseCallback(VK_RELEASE, mouseCoords.x, mouseCoords.y, c);
+			}
+		}
+
 }
 
 void Input::ReadKeyboard() {
@@ -113,8 +125,10 @@ void Input::ReadKeyboard() {
 }
 
 void Input::ReadMouse() {
+
+	oldMouseState = currentMouseState;
 	
-	HRESULT hr = mouse->GetDeviceState(sizeof(mouseState), (LPVOID)&mouseState);
+	HRESULT hr = mouse->GetDeviceState(sizeof(currentMouseState), (LPVOID)&currentMouseState);
 	if (FAILED(hr)) {
 		if (hr == DIERR_INPUTLOST || hr == DIERR_NOTACQUIRED)
 			mouse->Acquire();
@@ -123,7 +137,9 @@ void Input::ReadMouse() {
 }
 
 void Input::SetKeyEventCallback(void(*callback)(int type, int key, int modifiers)) {
-
 	this->keyCallback = callback;
+}
 
+void Input::SetMouseEventCallback(void(*callback)(int type, int x, int y, int button)) {
+	this->mouseCallback = callback;
 }

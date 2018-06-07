@@ -35,6 +35,7 @@ bool CreateDeviceAndSwapChain(HWND hWnd);
 bool CreateBuffers();
 void CleanD3D();
 void KeyEvent(int type, int key, int modifiers);
+void MouseEvent(int type, int x, int y, int button);
 
 void gotoxy(int x, int y);
 void print_video_card_info(ID3D11Device *  device);
@@ -52,7 +53,7 @@ ID3D11RenderTargetView *		backbuffer;
 ID3D11DepthStencilView *		depthbuffer;
 
 int fps = 0;
-int msaaSamples = 8;
+int msaaSamples = 1;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow){
 
@@ -86,6 +87,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// create the input
 	input = new Input(hInstance, display->hWnd, SCREEN_WIDTH, SCREEN_HEIGHT);
 	input->SetKeyEventCallback(KeyEvent);
+	input->SetMouseEventCallback(MouseEvent);
 
 	// initialize the engine
 	if (!engine->InitPipeline()) {
@@ -216,7 +218,7 @@ bool CreateDeviceAndSwapChain(HWND hWnd) {
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		D3D11_CREATE_DEVICE_DEBUG,
+		/*D3D11_CREATE_DEVICE_DEBUG*/ NULL,
 		NULL,
 		NULL,
 		D3D11_SDK_VERSION,
@@ -348,6 +350,15 @@ void KeyEvent(int type, int key, int modifiers) {
 	cout << "                                                                             ";
 	gotoxy(0, 4);
 	cout << "Key '" << (int)key << "' was " << (type == VK_PRESS ? "pressed" : "released") << " with modifier " << modifiers << endl;
+
+}
+
+void MouseEvent(int type, int x, int y, int button) {
+
+	gotoxy(0, 5);
+	cout << "                                                                             ";
+	gotoxy(0, 5);
+	cout << "Mouse button '" << (int)button << "' was " << (type == VK_PRESS ? "pressed" : "released") << " at (" << x << "," << y << ")" << endl;
 
 }
 

@@ -10,21 +10,23 @@
 #define VK_RELEASE				0x4
 #define VK_PRESS				0x5
 
-#define VM_RMB					0x6
-#define VM_LMB					0x7
-#define VM_MMB					0x8
+#define VM_RMB					0
+#define VM_LMB					1
+#define VM_MMB					2
 
 
 #pragma once
 class Input
 {
 private:
+	HWND						hWnd;
+
 	IDirectInput8 *				directInput;
 	IDirectInputDevice8 *		keyboard;
 	IDirectInputDevice8 *		mouse;
 
 	BYTE currentKeyboardState[256], oldKeyboardState[256];
-	DIMOUSESTATE mouseState;
+	DIMOUSESTATE currentMouseState, oldMouseState;
 
 	int screenWidth, screenHeight;
 	int mouseX, mouseY;
@@ -42,5 +44,6 @@ public:
 	void Frame(double deltaSec);
 
 	void SetKeyEventCallback(void (*callback)(int type, int key, int modifiers));
+	void SetMouseEventCallback(void (*callback)(int type, int x, int y, int button));
 };
 
