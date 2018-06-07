@@ -1,10 +1,1 @@
-﻿  GLMath.lib(GLVector.obj) : .netmodule ou module MSIL compilé avec /GL trouvé ; redémarrage de l'édition de liens avec /LTCG ; ajoutez /LTCG à la ligne de commande de l'édition de liens pour améliorer les performances de l'Éditeur de liens
-LINK : warning LNK4075: ' /INCREMENTAL' ignorÚ Ó cause de la spÚcification '/LTCG'
-GLMath.lib(GLVector.obj) : error LNK2038: discordance dÚtectÚe pour '_ITERATOR_DEBUG_LEVEL'á: la valeur '0' ne correspond pas Ó la valeur '2' in Camera.obj
-GLMath.lib(GLVector.obj) : error LNK2038: discordance dÚtectÚe pour 'RuntimeLibrary'á: la valeur 'MD_DynamicRelease' ne correspond pas Ó la valeur 'MDd_DynamicDebug' in Camera.obj
-GLMath.lib(GLMatrix.obj) : error LNK2038: discordance dÚtectÚe pour '_ITERATOR_DEBUG_LEVEL'á: la valeur '0' ne correspond pas Ó la valeur '2' in Camera.obj
-GLMath.lib(GLMatrix.obj) : error LNK2038: discordance dÚtectÚe pour 'RuntimeLibrary'á: la valeur 'MD_DynamicRelease' ne correspond pas Ó la valeur 'MDd_DynamicDebug' in Camera.obj
-GLMath.lib(GLMath.obj) : error LNK2038: discordance dÚtectÚe pour '_ITERATOR_DEBUG_LEVEL'á: la valeur '0' ne correspond pas Ó la valeur '2' in Camera.obj
-GLMath.lib(GLMath.obj) : error LNK2038: discordance dÚtectÚe pour 'RuntimeLibrary'á: la valeur 'MD_DynamicRelease' ne correspond pas Ó la valeur 'MDd_DynamicDebug' in Camera.obj
-MSVCRTD.lib(initializers.obj) : warning LNK4098: conflit entre la bibliothÞque par dÚfaut 'msvcrt.lib' et les autres bibliothÞquesá; utilisez /NODEFAULTLIB:library
-C:\Users\milatinovc\Documents\Github\DirectX-Game-Engine\Debug\DirectX Game Engine.exe : fatal error LNK1319: 6 discordances dÚtectÚes
+﻿  DirectX Game Engine.vcxproj -> C:\Users\Cristian\Documents\GitHub Projects\DirectX-Game-Engine\Debug\DirectX Game Engine.exe

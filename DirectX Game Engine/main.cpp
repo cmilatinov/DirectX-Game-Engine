@@ -8,7 +8,6 @@
 #include <fcntl.h>
 
 #include <d3d11.h>
-#include <d3dx9math.h>
 #include <d3dx10.h>
 #include <d3dx11.h>
 
@@ -53,7 +52,7 @@ ID3D11RenderTargetView *		backbuffer;
 ID3D11DepthStencilView *		depthbuffer;
 
 int fps = 0;
-int msaaSamples = 1;
+int msaaSamples = 8;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow){
 
@@ -217,7 +216,7 @@ bool CreateDeviceAndSwapChain(HWND hWnd) {
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		/*D3D_CREATE_DEVICE_DEBUG*/ NULL,
+		D3D11_CREATE_DEVICE_DEBUG,
 		NULL,
 		NULL,
 		D3D11_SDK_VERSION,
